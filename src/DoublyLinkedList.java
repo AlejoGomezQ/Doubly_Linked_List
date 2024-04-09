@@ -1,96 +1,109 @@
+class Node {
+    int data;
+    Node prev;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
 public class DoublyLinkedList {
+    Node head;
+    Node tail;
 
-    static Node head; // head of list
+    DoublyLinkedList() {
+        this.head = null;
+        this.tail = null;
+    }
 
-    static class Node {
-
-        int data;
-        Node next, prev;
-
-        Node(int d)
-        {
-            data = d;
-            next = prev = null;
+    void insert(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
         }
     }
 
-    Node split(Node head)
-    {
-        Node fast = head;
+    void display() {
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    DoublyLinkedList[] split() {
+        DoublyLinkedList[] result = new DoublyLinkedList[2];
+        result[0] = new DoublyLinkedList();
+        result[1] = new DoublyLinkedList();
+
+        if (head == null || head.next == null) {
+            result[0].head = head;
+            return result;
+        }
+
         Node slow = head;
+        Node fast = head.next;
 
-        while (fast.next != null
-                && fast.next.next != null) {
-            fast = fast.next.next;
-            slow = slow.next;
+        while (fast != null) {
+            fast = fast.next;
+            if (fast != null) {
+                slow = slow.next;
+                fast = fast.next;
+            }
         }
 
-        Node temp = slow.next;
+        result[0].head = head;
+        result[1].head = slow.next;
+        slow.next.prev = null;
         slow.next = null;
-        return temp;
+
+        return result;
     }
 
-    // Function to merge two linked lists
-    Node merge(Node first, Node second)
-    {
-        if (first == null) {
-            return second;
+    static DoublyLinkedList merge(DoublyLinkedList l1, DoublyLinkedList l2) {
+        DoublyLinkedList mergedList = new DoublyLinkedList();
+        Node current1 = l1.head;
+        Node current2 = l2.head;
+
+        while (current1 != null && current2 != null) {
+            if (current1.data < current2.data) {
+                mergedList.insert(current1.data);
+                current1 = current1.next;
+            } else {
+                mergedList.insert(current2.data);
+                current2 = current2.next;
+            }
         }
 
-        if (second == null) {
-            return first;
+        while (current1 != null) {
+            mergedList.insert(current1.data);
+            current1 = current1.next;
         }
 
-        if (first.data < second.data) {
-            first.next = merge(first.next, second);
-            first.next.prev = first;
-            first.prev = null;
-            return first;
+        while (current2 != null) {
+            mergedList.insert(current2.data);
+            current2 = current2.next;
         }
-        else {
-            second.next = merge(first, second.next);
-            second.next.prev = second;
-            second.prev = null;
-            return second;
-        }
+
+        return mergedList;
     }
 
-    Node mergeSort(Node node)
-    {
-        if (node == null || node.next == null) {
-            return node;
+    static void mergesort(DoublyLinkedList l) {
+        if (l.head == null || l.head.next == null) {
+            return;
         }
-        Node second = split(node);
 
-        node = mergeSort(node);
-        second = mergeSort(second);
-
-        return merge(node, second);
-    }
-
-    void print(Node node)
-    {
-        while (node != null) {
-            System.out.print(node.data + " ");
-            node = node.next;
-        }
-    }
-
-    public static void main(String[] args)
-    {
-
-        DoublyLinkedList list = new DoublyLinkedList();
-        list.head = new Node(10);
-        list.head.next = new Node(30);
-        list.head.next.next = new Node(3);
-        list.head.next.next.next = new Node(4);
-        list.head.next.next.next.next = new Node(20);
-        list.head.next.next.next.next.next = new Node(5);
-        list.head.next.next.next.next.next.next = new Node(15);
-
-        Node node = null;
-        node = list.mergeSort(head);
-        System.out.println("Linked list after sorting :");
-        list.print(node);
+        DoublyLinkedList[] halves = l.split();
+        mergesort(halves[0]);
+        mergesort(halves[1]);
+        l.head = merge(halves[0], halves[1]).head;
     }
 }
