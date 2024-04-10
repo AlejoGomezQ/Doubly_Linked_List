@@ -1,25 +1,23 @@
 class Node {
-    int data;
-    Node prev;
-    Node next;
+    String data;
+    Node prev, next;
 
-    Node(int data) {
+    public Node(String data) {
         this.data = data;
         this.prev = null;
         this.next = null;
     }
 }
 
-public class DoublyLinkedList {
-    Node head;
-    Node tail;
+class DoublyLinkedList {
+    Node head, tail;
 
-    DoublyLinkedList() {
-        this.head = null;
-        this.tail = null;
+    public DoublyLinkedList() {
+        head = tail = null;
     }
 
-    void insert(int data) {
+    // Método para insertar un nuevo nodo al final de la lista
+    public void insert(String data) {
         Node newNode = new Node(data);
         if (head == null) {
             head = tail = newNode;
@@ -30,7 +28,8 @@ public class DoublyLinkedList {
         }
     }
 
-    void display() {
+    // Método para imprimir la lista
+    public void display() {
         Node current = head;
         while (current != null) {
             System.out.print(current.data + " ");
@@ -39,42 +38,37 @@ public class DoublyLinkedList {
         System.out.println();
     }
 
-    DoublyLinkedList[] split() {
-        DoublyLinkedList[] result = new DoublyLinkedList[2];
-        result[0] = new DoublyLinkedList();
-        result[1] = new DoublyLinkedList();
-
-        if (head == null || head.next == null) {
-            result[0].head = head;
-            return result;
-        }
+    // Método para dividir la lista en dos sublistas
+    private DoublyLinkedList[] split() {
+        DoublyLinkedList[] lists = new DoublyLinkedList[2];
+        lists[0] = new DoublyLinkedList();
+        lists[1] = new DoublyLinkedList();
 
         Node slow = head;
-        Node fast = head.next;
-
-        while (fast != null) {
-            fast = fast.next;
-            if (fast != null) {
-                slow = slow.next;
-                fast = fast.next;
-            }
+        Node fast = head;
+        while (fast != null && fast.next != null) {
+            lists[0].insert(slow.data);
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
-        result[0].head = head;
-        result[1].head = slow.next;
-        slow.next.prev = null;
-        slow.next = null;
+        while (slow != null) {
+            lists[1].insert(slow.data);
+            slow = slow.next;
+        }
 
-        return result;
+        return lists;
     }
 
-    static DoublyLinkedList merge(DoublyLinkedList l1, DoublyLinkedList l2) {
+    // Método para unir dos listas ordenadas
+    private static DoublyLinkedList merge(DoublyLinkedList list1, DoublyLinkedList list2) {
         DoublyLinkedList mergedList = new DoublyLinkedList();
-        Node current1 = l1.head;
-        Node current2 = l2.head;
+
+        Node current1 = list1.head;
+        Node current2 = list2.head;
 
         while (current1 != null && current2 != null) {
-            if (current1.data < current2.data) {
+            if (current1.data.compareTo(current2.data) <= 0) {
                 mergedList.insert(current1.data);
                 current1 = current1.next;
             } else {
@@ -96,14 +90,16 @@ public class DoublyLinkedList {
         return mergedList;
     }
 
-    static void mergesort(DoublyLinkedList l) {
-        if (l.head == null || l.head.next == null) {
-            return;
+    // Método de ordenamiento MergeSort
+    public static DoublyLinkedList mergesort(DoublyLinkedList list) {
+        if (list.head == list.tail) {
+            return list;
         }
 
-        DoublyLinkedList[] halves = l.split();
-        mergesort(halves[0]);
-        mergesort(halves[1]);
-        l.head = merge(halves[0], halves[1]).head;
+        DoublyLinkedList[] lists = list.split();
+        DoublyLinkedList firstHalf = mergesort(lists[0]);
+        DoublyLinkedList secondHalf = mergesort(lists[1]);
+
+        return merge(firstHalf, secondHalf);
     }
 }
