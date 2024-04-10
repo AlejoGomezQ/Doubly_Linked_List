@@ -16,7 +16,6 @@ class DoublyLinkedList {
         head = tail = null;
     }
 
-    // Método para insertar un nuevo nodo al final de la lista
     public void insert(String data) {
         Node newNode = new Node(data);
         if (head == null) {
@@ -28,7 +27,6 @@ class DoublyLinkedList {
         }
     }
 
-    // Método para imprimir la lista
     public void display() {
         Node current = head;
         while (current != null) {
@@ -38,7 +36,6 @@ class DoublyLinkedList {
         System.out.println();
     }
 
-    // Método para dividir la lista en dos sublistas
     private DoublyLinkedList[] split() {
         DoublyLinkedList[] lists = new DoublyLinkedList[2];
         lists[0] = new DoublyLinkedList();
@@ -56,11 +53,9 @@ class DoublyLinkedList {
             lists[1].insert(slow.data);
             slow = slow.next;
         }
-
         return lists;
     }
 
-    // Método para unir dos listas ordenadas
     private static DoublyLinkedList merge(DoublyLinkedList list1, DoublyLinkedList list2) {
         DoublyLinkedList mergedList = new DoublyLinkedList();
 
@@ -90,7 +85,6 @@ class DoublyLinkedList {
         return mergedList;
     }
 
-    // Método de ordenamiento MergeSort
     public static DoublyLinkedList mergesort(DoublyLinkedList list) {
         if (list.head == list.tail) {
             return list;

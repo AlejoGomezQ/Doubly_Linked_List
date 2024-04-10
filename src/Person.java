@@ -4,18 +4,14 @@ class Person implements Comparable<Person> {
 
     private String nombres;
     private String apellidos;
-    private int edad;
-    private float peso;
 
     public Person(String n, String a, int e, float p) {
         nombres = n;
         apellidos = a;
-        edad = e;
-        peso = p;
     }
 
     public String toString() {
-        return nombres+" "+apellidos+" : "+edad+", "+df.format(peso);
+        return nombres + " " + apellidos;
     }
 
     @Override
