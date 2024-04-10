@@ -5,7 +5,7 @@ class Person implements Comparable<Person> {
     private String nombres;
     private String apellidos;
 
-    public Person(String n, String a, int e, float p) {
+    public Person(String n, String a) {
         nombres = n;
         apellidos = a;
     }
@@ -18,11 +18,6 @@ class Person implements Comparable<Person> {
     public int compareTo(Person o) {
         // TODO Auto-generated method stub
         return 0;
-    }
-
-    private static final DecimalFormat df = new DecimalFormat();
-    {
-        df.setMaximumFractionDigits(2);
     }
 
 }

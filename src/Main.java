@@ -15,10 +15,7 @@ public class Main {
             String nombre2 = partes[1];
             String apellido1 = partes[2];
             String apellido2 = partes[3];
-            // Asumiendo que edad y peso son aleatorios
-            int edad = (int) (Math.random() * 100);
-            float peso = (float) (Math.random() * 100);
-            listaPersonas.insert(new Person(nombre1 + " " + nombre2 + " " + apellido1 + " " + apellido2, "", edad, peso).toString());
+            listaPersonas.insert(new Person(nombre1 + " " + nombre2 + "", apellido1 + " " + apellido2 + ",").toString());
         }
 
         System.out.println("Lista sin ordenar:");
